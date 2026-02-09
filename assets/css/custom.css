@@ -1,0 +1,37 @@
+.weather-gradient{
+    background: linear-gradient(
+    to bottom,
+    #4B0082,
+    #5C3373
+  );
+}
+
+.card-weather-gradient{
+    background: linear-gradient(
+        #9356d2,
+        #9877ba
+    );
+}
+
+
+
+.weather-gradient,
+.weather-gradient .card-header,
+.weather-gradient .card-body,
+.weather-gradient .numbers,
+.weather-gradient h6,
+.weather-gradient h5,
+.weather-gradient p,
+.weather-gradient .text-sm,
+.weather-gradient .font-weight-bold,
+.dropdown.card-weather-gradient .dropdown-toggle,
+.footer,
+.footer .copyright,
+.nav-footer .nav-link {
+    color: #ffffff !important;
+}
+
+.card-weather-gradient i,
+.card-weather-gradient .ni {
+    color: rgba(255,255,255,0.95) !important;
+}
