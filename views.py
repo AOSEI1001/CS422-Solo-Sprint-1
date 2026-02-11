@@ -1,14 +1,13 @@
+import os
+import requests
 from flask import Blueprint, render_template
 from flask import request
-import requests
-import os
-import random
-#from dotenv import load_dotenv
-#load_dotenv()
+
 
 # Create a blueprint
 main_blueprint = Blueprint('main', __name__)
 
+# dogstring
 @main_blueprint.route('/', methods=['GET', 'POST'])
 def index():
     
