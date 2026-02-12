@@ -1,6 +1,11 @@
 // Store selected location
 let selectedLocation = null;
 
+let weatherId = document.getElementById('weather-data');
+
+
+
+
 // Initialize location search on page load
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('locationSearchInput');
@@ -101,3 +106,27 @@ function submitWeatherSearch(location) {
   document.body.appendChild(form);
   form.submit();
 }
+
+function updateLocalTime() {
+  if (weatherId) {
+    // Get UTC time and adjust by timezone offset
+    let weatherData = JSON.parse(weatherId.textContent);
+    
+    if(weatherData && weatherData.timezone){
+      const now = new Date();
+      const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
+      const localTime = new Date(utcTime + (weatherData.timezone * 1000));
+      
+      document.getElementById('localTime').textContent = localTime.toLocaleTimeString();
+    }
+
+    
+
+
+    
+  }
+}
+
+// Update time every second
+setInterval(updateLocalTime, 1000);
+updateLocalTime(); // Initial call

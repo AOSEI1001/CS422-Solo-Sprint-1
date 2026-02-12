@@ -2,6 +2,7 @@ import os
 import requests
 from flask import Blueprint, redirect, url_for, session
 from flask import request
+from datetime import datetime
 
 
 # Create a blueprint
@@ -25,7 +26,11 @@ def index():
     if city:
         api_key = os.environ.get('WEATHER_KEY')
         api_response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric")
-        
+        lat = api_response.json()['coord']['lat']
+        lon = api_response.json()['coord']['lon']
+        forcecast_response = requests.get(f"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units=metric")
+
+            
         if api_response.status_code == 200:
             weather_data = api_response.json()
             session['weather_data'] = weather_data
@@ -33,6 +38,25 @@ def index():
         else:
             session['error_message'] = f"Error retrieving weather data for {city}: {api_response.status_code}"
         
+        if forcecast_response.status_code == 200:
+            forecast_data = forcecast_response.json()
+            filtered_forecast = []
+            for entry in forecast_data['list']:
+                if '12:00:00' in entry['dt_txt']:
+                    data_object = datetime.strptime(entry['dt_txt'], '%Y-%m-%d %H:%M:%S')
+                    
+                    filtered_forecast.append({
+                        'day': data_object.strftime('%a'),
+                        'temp': entry['main']['temp'],
+                        'description': entry['weather'][0]['description'],
+                        'icon': entry['weather'][0]['icon']
+                    })
+            
+            session['forecast_data'] = filtered_forecast
+            print(filtered_forecast)
+        else:
+            session['forecast_error_message'] = f"Error retrieving forecast data for {city}: {forcecast_response.status_code}"
+            
         return redirect(url_for('main.dashboard'))
     
     return redirect(url_for('main.dashboard'))
@@ -43,9 +67,11 @@ def dashboard():
     from flask import render_template
     google_api_key = os.environ.get('GOOGLE_MAP_API')
     weather_data = session.get('weather_data')
+    forecast_data = session.get('forecast_data')
     error_message = session.get('error_message')
+    forecast_error_message = session.get('forecast_error_message')
     
-    return render_template('dashboard.html', weather_data=weather_data, error_message=error_message, google_api_key=google_api_key)
+    return render_template('dashboard.html', weather_data=weather_data, forecast_data=forecast_data, error_message=error_message, forecast_error_message=forecast_error_message, google_api_key=google_api_key)
 
 
 
