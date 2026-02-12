@@ -57,6 +57,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              <input type="hidden" id="googleApiKey" value="{{ google_api_key }}">
               <div class="mb-3">
                 <input type="text" class="form-control" id="locationSearchInput" placeholder="Search location..." autocomplete="off">
               </div>
@@ -80,12 +81,21 @@
               <p class="text-sm mb-0">
                 {% if weather_data %}
                   <div class="mt-4">
+                    <div class="row">
                       <img src="http://openweathermap.org/img/wn/{{ weather_data.weather[0].icon }}.png" alt="Weather Icon" width="100" height="100">
-                      <h3>Weather in {{ weather_data.name }}</h3>
                       <p><strong>Temperature:</strong> {{ weather_data.main.temp }}°C</p>
+                    </div>
+                      
+                      <h3>Weather in {{ weather_data.name }}</h3>
                       <p><strong>Weather:</strong> {{ weather_data.weather[0].description }}</p>
-                      <p><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</p>
-                      <p><strong>Wind Speed:</strong> {{ weather_data.wind.speed }} m/s</p>
+
+                      <div class="row">
+                        <p><strong>Wind Speed:</strong> {{ weather_data.wind.speed }} m/s</p>
+                        <p><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</p>
+                        <p><strong>Visibility:</strong> {{ weather_data.main.visibility }}%</p>
+                        <p><strong>Pressure:</strong> {{ weather_data.main.pressure }}%</p>
+
+                      </div>
                   </div>
                   {% endif %}
               </p>
@@ -388,6 +398,8 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{ url_for('static', filename='js/argon-dashboard.min.js') }}"></script>
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places"></script>
   <!-- Location Modal Script -->
   <script src="{{ url_for('static', filename='js/location-modal.js') }}"></script>
 </body>
