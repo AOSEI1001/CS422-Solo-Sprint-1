@@ -35,3 +35,20 @@
 .card-weather-gradient .ni {
     color: rgba(255,255,255,0.95) !important;
 }
+
+
+.icon-small {
+    font-size: xx-small;
+}
+
+#location-map {
+    width: 100%;
+    min-height: 400px;
+    border-radius: 0.5rem;
+}
+
+
+.large-text{
+    font-size: xx-large;
+}
+
