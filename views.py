@@ -36,7 +36,7 @@ def index():
 
     """
 
-    city = request.args.get('city', timeout=5) or request.form.get('city', timeout=5)
+    city = request.args.get('city') or request.form.get('city')
 
     print(os.environ.get("WEATHER_KEY"))
     print(os.environ.get("GOOGLE_MAP_API"))
@@ -48,7 +48,7 @@ def index():
 
     # Handle GET request with city parameter
     if city:
-        api_key = os.environ.get('WEATHER_KEY', timeout=5)
+        api_key = os.environ.get('WEATHER_KEY')
         api_response = requests.get(
             f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
             , timeout=5)
@@ -57,9 +57,14 @@ def index():
             weather_data = api_response.json()
             lat = api_response.json()['coord']['lat']
             lon = api_response.json()['coord']['lon']
+            payload = {
+                'lat': lat,
+                'lon': lon,
+                'appid': api_key,
+                'units': 'metric'
+            }
             forcecast_response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units=metric"
-                , timeout=5)
+            "https://api.openweathermap.org/data/2.5/forecast", params=payload, timeout=5)
             session['weather_data'] = weather_data
             print(weather_data)
 
@@ -104,7 +109,7 @@ def dashboard():
     variables for use in the template.
     
     """
-    google_api_key = os.environ.get('GOOGLE_MAP_API', timeout=5)
+    google_api_key = os.environ.get('GOOGLE_MAP_API')
     weather_data = session.get('weather_data')
     forecast_data = session.get('forecast_data')
     forecast_raw_data = session.get('forecast_raw_data')
