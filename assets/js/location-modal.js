@@ -1,7 +1,6 @@
 // Store selected location
 let selectedLocation = null;
 
-let weatherId = document.getElementById('weather-data');
 
 
 
@@ -12,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const locationOptions = document.getElementById('locationOptions');
   const confirmBtn = document.getElementById('confirmLocation');
 
+  // Update time every second
+  setInterval(updateLocalTime, 60000);
+  updateLocalTime(); // Initial call
+  
   // Live search as user types
   searchInput.addEventListener('input', async function() {
     const searchTerm = this.value.trim();
@@ -108,25 +111,39 @@ function submitWeatherSearch(location) {
 }
 
 function updateLocalTime() {
+  const weatherId = document.getElementById('weather-data');
+  const localTimeElement = document.getElementById('localTime');
+
   if (weatherId) {
     // Get UTC time and adjust by timezone offset
-    let weatherData = JSON.parse(weatherId.textContent);
-    
-    if(weatherData && weatherData.timezone){
-      const now = new Date();
-      const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
-      const localTime = new Date(utcTime + (weatherData.timezone * 1000));
+
+    try{
+
+      let weatherData = JSON.parse(weatherId.textContent);
       
-      document.getElementById('localTime').textContent = localTime.toLocaleTimeString();
+      if(weatherData && weatherData.timezone){
+        const now = new Date();
+        const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
+        const localTime = new Date(utcTime + (weatherData.timezone * 1000));
+        
+        const options = {
+          weekday: 'short',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        };
+
+        localTimeElement.textContent = localTime.toLocaleTimeString('en-US', options);
+        console.log("timed it")
+        }
+      }
+      catch(e){
+        console.error("Error parsing weather data for clock:", e);
+      }
+
+      
     }
 
-    
-
-
-    
-  }
+  
 }
 
-// Update time every second
-setInterval(updateLocalTime, 1000);
-updateLocalTime(); // Initial call

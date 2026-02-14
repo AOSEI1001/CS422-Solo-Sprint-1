@@ -1,3 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%); /* Classic sky blue */
+}
+
+.current-temp {
+    font-size: 5rem;
+    font-weight: 300; /* Thin look */
+    letter-spacing: -2px;
+}
+
 .weather-gradient{
     background: linear-gradient(
     to bottom,
