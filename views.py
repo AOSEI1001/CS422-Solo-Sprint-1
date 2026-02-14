@@ -50,7 +50,7 @@ def index():
     if city:
         api_key = os.environ.get('WEATHER_KEY')
         api_response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=imperial"
+        f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=imperial"
             , timeout=5)
 
         if api_response.status_code == 200:
